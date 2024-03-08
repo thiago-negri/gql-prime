@@ -3,12 +3,13 @@
 Main objective of this project is to create a foundation for GraphQL backend that has all required features for a production API and it is supposed to be
 easy to maintain. Includes:
 
-- Database access (Knex)
-- External cache read and write (Redis)
+- Database access (Knex) -- TODO
+- External cache read and write (Redis) -- TODO
 - Dependency injection (Awilix)
 - GraphQL schema / resolvers (Mercurius)
+- Data loaders to avoid N+1 issues -- TODO
 - HTTP server (Fastify)
-- Unit and integration tests
+- Unit and integration tests -- TODO
 
 It's still a work in progress.
 
