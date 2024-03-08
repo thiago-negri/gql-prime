@@ -16,33 +16,42 @@ export type Scalars = {
   Float: { input: number; output: number; }
 };
 
+export type FindUserInput = {
+  id: Scalars['ID']['input'];
+};
+
+export type FindUserPayload = {
+  __typename?: 'FindUserPayload';
+  user?: Maybe<User>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
-  register?: Maybe<RegisterPayload>;
+  registerUser?: Maybe<RegisterUserPayload>;
 };
 
 
-export type MutationRegisterArgs = {
-  input: RegisterInput;
+export type MutationRegisterUserArgs = {
+  input: RegisterUserInput;
 };
 
 export type Query = {
   __typename?: 'Query';
-  user?: Maybe<User>;
+  findUser?: Maybe<FindUserPayload>;
 };
 
 
-export type QueryUserArgs = {
-  id: Scalars['ID']['input'];
+export type QueryFindUserArgs = {
+  input: FindUserInput;
 };
 
-export type RegisterInput = {
+export type RegisterUserInput = {
   password: Scalars['String']['input'];
   username: Scalars['String']['input'];
 };
 
-export type RegisterPayload = {
-  __typename?: 'RegisterPayload';
+export type RegisterUserPayload = {
+  __typename?: 'RegisterUserPayload';
   user: User;
 };
 
@@ -125,11 +134,13 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
+  FindUserInput: FindUserInput;
+  FindUserPayload: ResolverTypeWrapper<FindUserPayload>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
-  RegisterInput: RegisterInput;
-  RegisterPayload: ResolverTypeWrapper<RegisterPayload>;
+  RegisterUserInput: RegisterUserInput;
+  RegisterUserPayload: ResolverTypeWrapper<RegisterUserPayload>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   User: ResolverTypeWrapper<User>;
 }>;
@@ -137,24 +148,31 @@ export type ResolversTypes = ResolversObject<{
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars['Boolean']['output'];
+  FindUserInput: FindUserInput;
+  FindUserPayload: FindUserPayload;
   ID: Scalars['ID']['output'];
   Mutation: {};
   Query: {};
-  RegisterInput: RegisterInput;
-  RegisterPayload: RegisterPayload;
+  RegisterUserInput: RegisterUserInput;
+  RegisterUserPayload: RegisterUserPayload;
   String: Scalars['String']['output'];
   User: User;
 }>;
 
+export type FindUserPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['FindUserPayload'] = ResolversParentTypes['FindUserPayload']> = ResolversObject<{
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
-  register?: Resolver<Maybe<ResolversTypes['RegisterPayload']>, ParentType, ContextType, RequireFields<MutationRegisterArgs, 'input'>>;
+  registerUser?: Resolver<Maybe<ResolversTypes['RegisterUserPayload']>, ParentType, ContextType, RequireFields<MutationRegisterUserArgs, 'input'>>;
 }>;
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
-  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
+  findUser?: Resolver<Maybe<ResolversTypes['FindUserPayload']>, ParentType, ContextType, RequireFields<QueryFindUserArgs, 'input'>>;
 }>;
 
-export type RegisterPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['RegisterPayload'] = ResolversParentTypes['RegisterPayload']> = ResolversObject<{
+export type RegisterUserPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['RegisterUserPayload'] = ResolversParentTypes['RegisterUserPayload']> = ResolversObject<{
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -166,9 +184,10 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
 }>;
 
 export type Resolvers<ContextType = any> = ResolversObject<{
+  FindUserPayload?: FindUserPayloadResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
-  RegisterPayload?: RegisterPayloadResolvers<ContextType>;
+  RegisterUserPayload?: RegisterUserPayloadResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
 }>;
 

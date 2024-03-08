@@ -1,0 +1,11 @@
+input FindUserInput {
+  id: ID!
+}
+
+type FindUserPayload {
+  user: User
+}
+
+type Query {
+  findUser(input: FindUserInput!): FindUserPayload
+}

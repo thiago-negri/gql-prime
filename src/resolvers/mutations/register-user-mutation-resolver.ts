@@ -1,6 +1,6 @@
 import { type MutationResolvers } from '../../gen/generated-schema-types'
 
-const registerMutationResolver: MutationResolvers['register'] = async (
+const registerUserMutationResolver: MutationResolvers['registerUser'] = async (
   _parent,
   { input },
   _context
@@ -14,5 +14,5 @@ const registerMutationResolver: MutationResolvers['register'] = async (
   }
 }
 
-const Mutation: MutationResolvers = { register: registerMutationResolver }
+const Mutation: MutationResolvers = { registerUser: registerUserMutationResolver }
 export default { Mutation }
