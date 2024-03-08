@@ -5,6 +5,7 @@ input LoginInput {
 
 type LoginPayload {
   ok: Boolean!
+  authToken: String
 }
 
 type Mutation {

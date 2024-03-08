@@ -32,6 +32,7 @@ export type LoginInput = {
 
 export type LoginPayload = {
   __typename?: 'LoginPayload';
+  authToken?: Maybe<Scalars['String']['output']>;
   ok: Scalars['Boolean']['output'];
 };
 
@@ -185,6 +186,7 @@ export type FindUserPayloadResolvers<ContextType = any, ParentType extends Resol
 }>;
 
 export type LoginPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['LoginPayload'] = ResolversParentTypes['LoginPayload']> = ResolversObject<{
+  authToken?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   ok?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;

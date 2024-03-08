@@ -1,3 +1,4 @@
+import type PublicUserModel from '../../models/public-user-model'
 import type UserModel from '../../models/user-model'
 
 class UsersData {
@@ -17,8 +18,16 @@ class UsersData {
     return id
   }
 
-  public findById (id: number): Omit<UserModel, 'password'> | undefined {
+  public findById (id: number): PublicUserModel | undefined {
     const user = this.users.find((user) => user.id === id)
+    if (user === undefined) {
+      return undefined
+    }
+    return { id: user.id, username: user.username }
+  }
+
+  public findByUsername (username: string): PublicUserModel | undefined {
+    const user = this.users.find((user) => user.username === username)
     if (user === undefined) {
       return undefined
     }
@@ -30,8 +39,8 @@ class UsersData {
     return user !== undefined
   }
 
-  public checkPassword (username: string, password: string): boolean {
-    const user = this.users.find((user) => user.username === username)
+  public checkPassword (id: number, password: string): boolean {
+    const user = this.users.find((user) => user.id === id)
     if (user === undefined) {
       return false
     }

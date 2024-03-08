@@ -1,11 +1,7 @@
-import { type FastifyRequest } from 'fastify'
-import type UsersData from '../data/users/users-data'
+import type GraphqlDiScope from './graphql-di-scope'
 
 interface GraphqlContext {
-  diScope: {
-    request: FastifyRequest
-    usersData: UsersData
-  }
+  diScope: GraphqlDiScope
 }
 
 export default GraphqlContext

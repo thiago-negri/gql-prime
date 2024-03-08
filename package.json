@@ -34,6 +34,7 @@
     "fastify": "^4.26.0",
     "graphql": "^16.8.1",
     "graphql-import-node": "^0.0.5",
+    "jsonwebtoken": "^9.0.2",
     "mercurius": "^13.3.3"
   }
 }
