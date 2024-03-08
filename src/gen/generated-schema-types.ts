@@ -55,6 +55,7 @@ export type MutationRegisterUserArgs = {
 export type Query = {
   __typename?: 'Query';
   findUser?: Maybe<FindUserPayload>;
+  myUser?: Maybe<User>;
 };
 
 
@@ -198,6 +199,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   findUser?: Resolver<Maybe<ResolversTypes['FindUserPayload']>, ParentType, ContextType, RequireFields<QueryFindUserArgs, 'input'>>;
+  myUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
 }>;
 
 export type RegisterUserPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['RegisterUserPayload'] = ResolversParentTypes['RegisterUserPayload']> = ResolversObject<{
