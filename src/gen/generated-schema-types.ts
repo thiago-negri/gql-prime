@@ -17,7 +17,7 @@ export type Scalars = {
 };
 
 export type FindUserInput = {
-  id: Scalars['ID']['input'];
+  id: Scalars['Int']['input'];
 };
 
 export type FindUserPayload = {
@@ -57,7 +57,7 @@ export type RegisterUserPayload = {
 
 export type User = {
   __typename?: 'User';
-  id: Scalars['ID']['output'];
+  id: Scalars['Int']['output'];
   username: Scalars['String']['output'];
 };
 
@@ -136,7 +136,7 @@ export type ResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   FindUserInput: FindUserInput;
   FindUserPayload: ResolverTypeWrapper<FindUserPayload>;
-  ID: ResolverTypeWrapper<Scalars['ID']['output']>;
+  Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   RegisterUserInput: RegisterUserInput;
@@ -150,7 +150,7 @@ export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars['Boolean']['output'];
   FindUserInput: FindUserInput;
   FindUserPayload: FindUserPayload;
-  ID: Scalars['ID']['output'];
+  Int: Scalars['Int']['output'];
   Mutation: {};
   Query: {};
   RegisterUserInput: RegisterUserInput;
@@ -178,7 +178,7 @@ export type RegisterUserPayloadResolvers<ContextType = any, ParentType extends R
 }>;
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;

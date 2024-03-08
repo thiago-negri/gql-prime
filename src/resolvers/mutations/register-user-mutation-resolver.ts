@@ -1,17 +1,15 @@
 import { type MutationResolvers } from '../../gen/generated-schema-types'
+import type GraphqlContext from '../../types/graphql-context'
 
-const registerUserMutationResolver: MutationResolvers['registerUser'] = async (
+const registerUserMutationResolver: MutationResolvers<GraphqlContext>['registerUser'] = async (
   _parent,
   { input },
-  _context
+  context
 ) => {
+  const { usersData } = context.diScope
   const { username } = input
-  return {
-    user: {
-      id: '1',
-      username
-    }
-  }
+  const id = usersData.addUser({ username })
+  return { user: { id, username } }
 }
 
 const Mutation: MutationResolvers = { registerUser: registerUserMutationResolver }
