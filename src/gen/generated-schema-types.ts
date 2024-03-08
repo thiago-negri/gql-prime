@@ -25,9 +25,25 @@ export type FindUserPayload = {
   user?: Maybe<User>;
 };
 
+export type LoginInput = {
+  password: Scalars['String']['input'];
+  username: Scalars['String']['input'];
+};
+
+export type LoginPayload = {
+  __typename?: 'LoginPayload';
+  ok: Scalars['Boolean']['output'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
+  login?: Maybe<LoginPayload>;
   registerUser?: Maybe<RegisterUserPayload>;
+};
+
+
+export type MutationLoginArgs = {
+  input: LoginInput;
 };
 
 
@@ -137,6 +153,8 @@ export type ResolversTypes = ResolversObject<{
   FindUserInput: FindUserInput;
   FindUserPayload: ResolverTypeWrapper<FindUserPayload>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
+  LoginInput: LoginInput;
+  LoginPayload: ResolverTypeWrapper<LoginPayload>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   RegisterUserInput: RegisterUserInput;
@@ -151,6 +169,8 @@ export type ResolversParentTypes = ResolversObject<{
   FindUserInput: FindUserInput;
   FindUserPayload: FindUserPayload;
   Int: Scalars['Int']['output'];
+  LoginInput: LoginInput;
+  LoginPayload: LoginPayload;
   Mutation: {};
   Query: {};
   RegisterUserInput: RegisterUserInput;
@@ -164,7 +184,13 @@ export type FindUserPayloadResolvers<ContextType = any, ParentType extends Resol
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type LoginPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['LoginPayload'] = ResolversParentTypes['LoginPayload']> = ResolversObject<{
+  ok?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
+  login?: Resolver<Maybe<ResolversTypes['LoginPayload']>, ParentType, ContextType, RequireFields<MutationLoginArgs, 'input'>>;
   registerUser?: Resolver<Maybe<ResolversTypes['RegisterUserPayload']>, ParentType, ContextType, RequireFields<MutationRegisterUserArgs, 'input'>>;
 }>;
 
@@ -185,6 +211,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
 
 export type Resolvers<ContextType = any> = ResolversObject<{
   FindUserPayload?: FindUserPayloadResolvers<ContextType>;
+  LoginPayload?: LoginPayloadResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   RegisterUserPayload?: RegisterUserPayloadResolvers<ContextType>;
