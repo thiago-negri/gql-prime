@@ -7,13 +7,14 @@ import { loadFilesSync } from '@graphql-tools/load-files'
 import { mergeResolvers, mergeTypeDefs } from '@graphql-tools/merge'
 import { type IResolvers } from '@graphql-tools/utils'
 import type GraphqlContext from '../types/graphql-context'
+import type GraphqlDiScope from '../types/graphql-di-scope'
 
 const typesArray = loadFilesSync<DocumentNode>(path.join(__dirname, '../schema/**/*.graphql'))
 const resolversArray = loadFilesSync<IResolvers>(path.join(__dirname, '../resolvers/**/*.ts'))
 
 const context: MercuriusOptions['context'] = (request): GraphqlContext => {
   return {
-    diScope: (request.diScope.cradle as GraphqlContext['diScope'])
+    diScope: (request.diScope.cradle as GraphqlDiScope)
   }
 }
 
