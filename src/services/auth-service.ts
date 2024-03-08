@@ -2,7 +2,7 @@ import { sign, verify } from 'jsonwebtoken'
 import type UsersData from '../data/users/users-data'
 import type GraphqlDiScope from '../types/graphql-di-scope'
 import type PublicUserModel from '../models/public-user-model'
-import { AUTH_TOKEN_SECRET_KEY, AUTH_TOKEN_TIME_TO_LIVE_IN_MS } from '../constants/auth-token-constantst'
+import { AUTH_TOKEN_SECRET_KEY, AUTH_TOKEN_TIME_TO_LIVE_IN_MS } from '../constants/auth-token-constants'
 
 class AuthService {
   private readonly usersData: UsersData
