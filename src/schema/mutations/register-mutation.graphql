@@ -1,0 +1,12 @@
+input RegisterInput {
+  username: String!
+  password: String!
+}
+
+type RegisterPayload {
+  user: User!
+}
+
+type Mutation {
+  register(input: RegisterInput!): RegisterPayload
+}
