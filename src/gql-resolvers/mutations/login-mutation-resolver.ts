@@ -9,9 +9,9 @@ const loginMutationResolver: MutationResolvers<GraphqlContext>['login'] = async 
     return { ok: false }
   }
   const passwordMatch = usersData.checkPassword(user.id, password)
-  const authToken = passwordMatch === true ? authService.generateAuthToken(user) : null
+  const authToken = passwordMatch ? authService.generateAuthToken(user) : null
   return { ok: passwordMatch, authToken }
 }
 
 const Mutation: MutationResolvers<GraphqlContext> = { login: loginMutationResolver }
-export { Mutation }
+export default { Mutation }
