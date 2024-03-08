@@ -24,9 +24,8 @@ a request.
 They are exposed according to the file name, with `di-resolver` removed from the suffix
 (e.g. `current-date-di-resolver.ts` becomes `currentDate` in the container).
 
-The name exposed
-
 The Awilix proxy object is not typed. To work around that, check type declaration at `./src/types/graphql-di-scope.ts`.
+The container is exposed to GQL resolvers through `context.diScope`.
 
 Check `./src/config/config-awilix.ts` to see how it's setup.
 
