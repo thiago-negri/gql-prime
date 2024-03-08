@@ -9,8 +9,8 @@ import { type IResolvers } from '@graphql-tools/utils'
 import type GraphqlContext from '../types/graphql-context'
 import type GraphqlDiScope from '../types/graphql-di-scope'
 
-const typesArray = loadFilesSync<DocumentNode>(path.join(__dirname, '../schema/**/*.graphql'))
-const resolversArray = loadFilesSync<IResolvers>(path.join(__dirname, '../resolvers/**/*.ts'))
+const typesArray = loadFilesSync<DocumentNode>(path.join(__dirname, '../gql-schema/**/*.graphql'))
+const resolversArray = loadFilesSync<IResolvers>(path.join(__dirname, '../gql-resolvers/**/*.ts'))
 
 const context: MercuriusOptions['context'] = (request): GraphqlContext => {
   return {
