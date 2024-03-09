@@ -29,6 +29,8 @@ through dependency injection.
 Data-layer services are defined in `./src/data` and present a higher-level of abstraction when handling database
 tables.
 
+You can create a new migration using `knex migrate:make <NAME> -x ts`.
+
 ## Dependency Injection (Awilix)
 
 Classes from `./src/data` and `./src/services` are automatically made available in the Awilix container.
