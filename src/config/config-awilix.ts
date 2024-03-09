@@ -1,7 +1,7 @@
 import path from 'path'
 import { fastifyAwilixPlugin } from '@fastify/awilix'
 import { Lifetime, asClass, asFunction, asValue, createContainer } from 'awilix'
-import { type FastifyInstance } from 'fastify'
+import { type FastifyInstance, type FastifyRequest, type FastifyReply } from 'fastify'
 
 /** user-service => userService */
 function formatDiClassName (fileName: string): string {
@@ -56,7 +56,7 @@ async function configAwilix (app: FastifyInstance): Promise<void> {
     }
   })
   // Add 'request' and 'reply' to DI scope
-  app.addHook('onRequest', (request, reply, done) => {
+  app.addHook('onRequest', (request: FastifyRequest, reply: FastifyReply, done: () => unknown): void => {
     request.diScope.register({
       request: asValue(request),
       reply: asValue(reply)
