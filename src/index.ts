@@ -1,9 +1,12 @@
+import dotenv from 'dotenv'
 import Fastify from 'fastify'
 
 import configAwilix from './config/config-awilix'
 import configMercurius from './config/config-mercurius'
 
 async function start (): Promise<void> {
+  dotenv.config()
+
   const app = Fastify()
   await configAwilix(app)
   await configMercurius(app)

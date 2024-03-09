@@ -1,20 +1,11 @@
 import knex, { type Knex } from 'knex'
+import type GraphqlDiScope from '../types/graphql-di-scope'
 
 class DatabaseConnectionPool {
   private readonly knexInstance: Knex
 
-  constructor () {
-    // TODO(tnegri): Secrets manager
-    this.knexInstance = knex({
-      client: 'mysql2',
-      connection: {
-        host: '127.0.0.1',
-        port: 3306,
-        user: 'gqlprime-rw',
-        password: 'passw0rd',
-        database: 'gqlprime'
-      }
-    })
+  constructor ({ secureProperties }: GraphqlDiScope) {
+    this.knexInstance = knex(secureProperties.knexConfiguration)
   }
 
   get (): Knex {

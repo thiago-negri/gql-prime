@@ -3,7 +3,7 @@ import type GraphqlContext from '../../types/graphql-context'
 
 const myUserQueryResolver: QueryResolvers<GraphqlContext>['myUser'] = async (_parent, _args, context) => {
   const { user } = context.diScope
-  return user ?? null
+  return (await user) ?? null
 }
 
 const Query: QueryResolvers = { myUser: myUserQueryResolver }

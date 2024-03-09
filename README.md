@@ -4,7 +4,8 @@ Main objective of this project is to create a foundation for GraphQL backend tha
 easy to maintain. Includes:
 
 - Database access and migrations (Knex)
-- Secrets manager to avoid having sensitive data in code -- TODO
+- Secure properties read from JSON file
+- Secure properties are typesafe -- TODO
 - External cache read and write (Redis) -- TODO
 - Dependency injection (Awilix)
 - GraphQL schema / resolvers (Mercurius)
@@ -13,6 +14,14 @@ easy to maintain. Includes:
 - Unit and integration tests -- TODO
 
 It's still a work in progress.
+
+## Secure Properties
+
+You need to create a `.env` file (you can copy from `.env.example`).
+
+The secure properties are going to be loaded from `secure-properties-<ENV_NAME>.json` and injected into the DI container.
+Secure properties will **not** be injected into `process.env` because other NPM packages may end up logging or leaking
+the env variables.
 
 ## Database (Knex)
 
