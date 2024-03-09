@@ -3,7 +3,8 @@
 Main objective of this project is to create a foundation for GraphQL backend that has all required features for a production API and it is supposed to be
 easy to maintain. Includes:
 
-- Database access (Knex) -- TODO
+- Database access and migrations (Knex)
+- Secrets manager to avoid having sensitive data in code -- TODO
 - External cache read and write (Redis) -- TODO
 - Dependency injection (Awilix)
 - GraphQL schema / resolvers (Mercurius)
@@ -12,6 +13,21 @@ easy to maintain. Includes:
 - Unit and integration tests -- TODO
 
 It's still a work in progress.
+
+## Database (Knex)
+
+You can run a local MySQL container using `docker-compose up -d`.
+
+Database migrations live in `./migrations` and can be run against your local database with `knex migrate:latest`.
+Make sure you have Knex installed globally to be able to use its CLI (`npm i -g knex`).
+
+Table schema is defined in `./src/@types/knex.d.ts`, this helps keep database operations typesafe.
+
+The app's database connection pool is defined by `./src/services/database-connection-pool.ts`, it's made available
+through dependency injection.
+
+Data-layer services are defined in `./src/data` and present a higher-level of abstraction when handling database
+tables.
 
 ## Dependency Injection (Awilix)
 

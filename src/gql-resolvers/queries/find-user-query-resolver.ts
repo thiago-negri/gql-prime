@@ -4,7 +4,7 @@ import type GraphqlContext from '../../types/graphql-context'
 const findUserQueryResolver: QueryResolvers<GraphqlContext>['findUser'] = async (_parent, { input }, context) => {
   const { usersData } = context.diScope
   const { id } = input
-  const user = usersData.findById(id)
+  const user = await usersData.findById(id)
   return { user }
 }
 

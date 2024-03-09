@@ -14,6 +14,7 @@
     "@graphql-codegen/cli": "^5.0.2",
     "@graphql-codegen/typescript": "^4.0.6",
     "@graphql-codegen/typescript-resolvers": "^4.0.6",
+    "@types/jsonwebtoken": "^9.0.6",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "eslint": "^8.57.0",
     "eslint-config-standard-with-typescript": "^43.0.1",
@@ -35,6 +36,8 @@
     "graphql": "^16.8.1",
     "graphql-import-node": "^0.0.5",
     "jsonwebtoken": "^9.0.2",
-    "mercurius": "^13.3.3"
+    "knex": "^3.1.0",
+    "mercurius": "^13.3.3",
+    "mysql2": "^3.9.2"
   }
 }

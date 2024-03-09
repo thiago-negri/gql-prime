@@ -1,47 +1,57 @@
 import type PublicUserModel from '../../models/public-user-model'
 import type UserModel from '../../models/user-model'
+import type DatabaseConnectionPool from '../../services/database-connection-pool'
+import type GraphqlDiScope from '../../types/graphql-di-scope'
 
 class UsersData {
-  private readonly users: UserModel[]
+  private readonly databaseConnectionPool: DatabaseConnectionPool
 
-  constructor () {
-    this.users = []
+  constructor ({ databaseConnectionPool }: GraphqlDiScope) {
+    this.databaseConnectionPool = databaseConnectionPool
   }
 
-  public addUser (user: Omit<UserModel, 'id'>): number {
-    const id = this.users.length
-    this.users.push({
-      id,
+  public async addUser (user: Omit<UserModel, 'id'>): Promise<number> {
+    const db = this.databaseConnectionPool.get()
+    const [id] = await db('users').insert({
       username: user.username,
-      password: user.password
+      password: user.password, // TODO(tnegri): Encrypt password
+      created_at: new Date()
     })
     return id
   }
 
-  public findById (id: number): PublicUserModel | undefined {
-    const user = this.users.find((user) => user.id === id)
-    if (user === undefined) {
+  public async findById (id: number): Promise<PublicUserModel | undefined> {
+    const db = this.databaseConnectionPool.get()
+    const user = await db('users').where('id', id).first()
+    if (user == null) {
+      return undefined
+    }
+    return {
+      id: user.id,
+      username: user.username
+    }
+  }
+
+  public async findByUsername (username: string): Promise<PublicUserModel | undefined> {
+    const db = this.databaseConnectionPool.get()
+    const user = await db('users').where('username', username).first()
+    if (user == null) {
       return undefined
     }
     return { id: user.id, username: user.username }
   }
 
-  public findByUsername (username: string): PublicUserModel | undefined {
-    const user = this.users.find((user) => user.username === username)
-    if (user === undefined) {
-      return undefined
-    }
-    return { id: user.id, username: user.username }
+  public async existsUsername (username: string): Promise<boolean> {
+    const db = this.databaseConnectionPool.get()
+    const user = await db('users').where('username', username).first()
+    return user != null
   }
 
-  public existsUsername (username: string): boolean {
-    const user = this.users.find((user) => user.username === username)
-    return user !== undefined
-  }
-
-  public checkPassword (id: number, password: string): boolean {
-    const user = this.users.find((user) => user.id === id)
-    if (user === undefined) {
+  public async checkPassword (id: number, password: string): Promise<boolean> {
+    // TODO(tnegri): Encrypt password
+    const db = this.databaseConnectionPool.get()
+    const user = await db('users').where('id', id).first()
+    if (user == null) {
       return false
     }
     return user.password === password

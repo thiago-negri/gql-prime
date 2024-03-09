@@ -9,10 +9,11 @@ const registerUserMutationResolver: MutationResolvers<GraphqlContext>['registerU
 ) => {
   const { usersData } = context.diScope
   const { username, password } = input
-  if (usersData.existsUsername(username)) {
+  const usernameExists = await usersData.existsUsername(username)
+  if (usernameExists) {
     throw new GraphqlError('usernameAlreadyExists')
   }
-  const id = usersData.addUser({ username, password })
+  const id = await usersData.addUser({ username, password })
   return { user: { id, username } }
 }
 

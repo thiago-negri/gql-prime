@@ -5,9 +5,6 @@ import { type FastifyInstance } from 'fastify'
 
 /** user-service => userService */
 function formatDiClassName (fileName: string): string {
-  if (!fileName.endsWith('-data') && !fileName.endsWith('-service')) {
-    throw new Error(`Invalid service/data name: ${fileName}`)
-  }
   const parts = fileName.split('-')
   let result = parts[0]
   for (let i = 1; i < parts.length; i++) {

@@ -15,8 +15,12 @@ class AuthService {
     return sign({ userId: user.id }, AUTH_TOKEN_SECRET_KEY, { expiresIn: AUTH_TOKEN_TIME_TO_LIVE_IN_MS, subject: user.username })
   }
 
-  public validateAuthToken (authToken: string): number {
-    const { userId } = verify(authToken, AUTH_TOKEN_SECRET_KEY)
+  public validateAuthToken (authToken: string): number | undefined {
+    const verifyResult = verify(authToken, AUTH_TOKEN_SECRET_KEY)
+    if (typeof verifyResult === 'string') {
+      return undefined
+    }
+    const { userId } = verifyResult
     return userId
   }
 }
