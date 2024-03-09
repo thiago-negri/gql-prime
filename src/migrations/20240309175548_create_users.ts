@@ -5,7 +5,7 @@ export async function up (knex: Knex): Promise<void> {
         CREATE TABLE users (
             id INT NOT NULL AUTO_INCREMENT,
             username VARCHAR(64) NOT NULL,
-            password VARCHAR(1024) NOT NULL,
+            password VARCHAR(53) NOT NULL,
             created_at TIMESTAMP NOT NULL,
             updated_at TIMESTAMP NULL,
             PRIMARY KEY (id),

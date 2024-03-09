@@ -32,6 +32,7 @@
     "@graphql-tools/schema": "^10.0.3",
     "@graphql-tools/utils": "^10.1.0",
     "awilix": "^10.0.1",
+    "bcrypt": "^5.1.1",
     "fastify": "^4.26.0",
     "graphql": "^16.8.1",
     "graphql-import-node": "^0.0.5",
