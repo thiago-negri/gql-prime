@@ -1,18 +1,16 @@
+import fs from 'fs'
 import type { Knex } from "knex";
+
+const securePropertiesContent = fs.readFileSync(`secure-properties-development.json`, { encoding: 'utf8' })
+const secureProperties = JSON.parse(securePropertiesContent)
+const developmentConfiguration = secureProperties.knexConfiguration
 
 const config: { [key: string]: Knex.Config } = {
   development: {
-    client: "mysql2",
-    connection: {
-      host: '127.0.0.1',
-      port: 3306,
-      user: 'gqlprime-rw',
-      password: 'passw0rd',
-      database: 'gqlprime'
-    },
     migrations: {
       directory: './src/migrations'
-    }
+    },
+    ...developmentConfiguration
   },
 };
 
