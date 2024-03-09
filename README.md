@@ -60,6 +60,8 @@ Check `./src/config/config-awilix.ts` to see how it's setup.
 
 GraphQL schema is exposed through Mercurius. All files in `./src/gql-schema` are merged to form the final exposed schema.
 
+If you change your schema, run `npm run codegen` to generate a new `./src/gen/generated-schema-types.ts`.
+
 All files defined in `./src/gql-resolver` are merged and automatically added as resolvers to the GraphQL runtime.
 The exported objects are merged, so each gql-resolver file should export an object that declares a type in the exposed schema.
 
