@@ -26,34 +26,31 @@ class UsersData {
 
   public async findById (id: number): Promise<PublicUserModel | undefined> {
     const db = this.databaseConnectionPool.get()
-    const user = await db('users').where('id', id).first()
+    const user = await db('users').select('username').where('id', id).first()
     if (user == null) {
       return undefined
     }
-    return {
-      id: user.id,
-      username: user.username
-    }
+    return { id, username: user.username }
   }
 
   public async findByUsername (username: string): Promise<PublicUserModel | undefined> {
     const db = this.databaseConnectionPool.get()
-    const user = await db('users').where('username', username).first()
+    const user = await db('users').select('id').where('username', username).first()
     if (user == null) {
       return undefined
     }
-    return { id: user.id, username: user.username }
+    return { id: user.id, username }
   }
 
   public async existsUsername (username: string): Promise<boolean> {
     const db = this.databaseConnectionPool.get()
-    const user = await db('users').where('username', username).first()
+    const user = await db('users').select('id').where('username', username).first()
     return user != null
   }
 
   public async checkPassword (id: number, password: string): Promise<boolean> {
     const db = this.databaseConnectionPool.get()
-    const user = await db('users').where('id', id).first()
+    const user = await db('users').select('password').where('id', id).first()
     if (user == null) {
       return false
     }
