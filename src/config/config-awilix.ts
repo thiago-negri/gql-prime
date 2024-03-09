@@ -1,6 +1,6 @@
 import path from 'path'
 import { fastifyAwilixPlugin } from '@fastify/awilix'
-import { Lifetime, asClass, asFunction, asValue } from 'awilix'
+import { Lifetime, asClass, asFunction, asValue, createContainer } from 'awilix'
 import { type FastifyInstance } from 'fastify'
 
 /** user-service => userService */
@@ -27,7 +27,9 @@ function formatDiResolverName (fileName: string): string {
 }
 
 async function configAwilix (app: FastifyInstance): Promise<void> {
+  const container = createContainer({ strict: true })
   await app.register(fastifyAwilixPlugin, {
+    container,
     disposeOnClose: true,
     disposeOnResponse: true,
     strictBooleanEnforced: true
