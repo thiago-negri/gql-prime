@@ -18,7 +18,7 @@ It's still a work in progress.
 
 You can run a local MySQL container using `docker-compose up -d`.
 
-Database migrations live in `./migrations` and can be run against your local database with `knex migrate:latest`.
+Database migrations live in `./src/migrations` and can be run against your local database with `knex migrate:latest`.
 Make sure you have Knex installed globally to be able to use its CLI (`npm i -g knex`).
 
 Table schema is defined in `./src/@types/knex.d.ts`, this helps keep database operations typesafe.

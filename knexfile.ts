@@ -9,6 +9,9 @@ const config: { [key: string]: Knex.Config } = {
       user: 'gqlprime-rw',
       password: 'passw0rd',
       database: 'gqlprime'
+    },
+    migrations: {
+      directory: './src/migrations'
     }
   },
 };
