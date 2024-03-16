@@ -75,6 +75,7 @@ async function configAwilix (app: FastifyInstance, secureProperties: SecurePrope
   })
 
   // Manual registration of singletons
+  app.diContainer.register('secureProperties', asValue(secureProperties))
   app.diContainer.register('databaseConnectionPool', asValue(new DatabaseConnectionPool(secureProperties.knex)))
   app.diContainer.register('redisClient', asValue(await redisClient(secureProperties.redis)))
 }

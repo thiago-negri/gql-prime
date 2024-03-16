@@ -11,5 +11,8 @@
     },
     "redis": {
         "url": "redis://:passw0rd@127.0.0.1:6379"
+    },
+    "auth": {
+        "tokenSecret": "authT0kenS3cret"
     }
 }
