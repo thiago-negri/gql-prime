@@ -17,6 +17,7 @@ easy to maintain. Includes:
 - HTTP server (Fastify)
 - Scheduled tasks -- TODO
 - Scheduled task to clear in memory cache -- TODO
+- Request metrics (cache, sql, ...) -- TODO
 - Logger -- TODO
 - Unit and integration tests -- TODO
 - Unit test that guarantees cache keys + schema uniqueness -- TODO
