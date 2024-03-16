@@ -3,16 +3,24 @@ import type CacheArgs from '../cache/cache-args'
 import type CacheKey from '../cache/cache-key'
 import type GraphqlDiScope from '../types/graphql-di-scope'
 import type CacheKeyComposite from '../cache/cache-key-composite'
+import { RESOLVER, Lifetime } from 'awilix'
 
 class CacheService {
+  /**
+   * CacheService needs to be SCOPED so the cache key resolvers can use SCOPED dependencies
+   */
+  static [RESOLVER] = {
+    lifetime: Lifetime.SCOPED
+  }
+
   private readonly graphqlDiScope: GraphqlDiScope
   private readonly readDataLoader: DataLoader<string, string | null>
   private readonly expireDataLoader: DataLoader<string, number | null>
 
   constructor (graphqlDiScope: GraphqlDiScope) {
     this.graphqlDiScope = graphqlDiScope
-    this.readDataLoader = new DataLoader(this.loadRead.bind(this), { maxBatchSize: 10, cache: false })
-    this.expireDataLoader = new DataLoader(this.loadExpire.bind(this), { maxBatchSize: 10, cache: false })
+    this.readDataLoader = new DataLoader(this.loadRead.bind(this), { maxBatchSize: 10 })
+    this.expireDataLoader = new DataLoader(this.loadExpire.bind(this), { maxBatchSize: 10 })
   }
 
   async read<PF extends CacheArgs, F extends CacheArgs, T, CT> (key: CacheKey<F, T> | CacheKeyComposite<PF, T, F, CT>, args: F): Promise<T | null> {
