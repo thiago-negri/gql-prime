@@ -1,16 +1,17 @@
+import cacheKeys from '../cache/cache-keys'
 import type PublicUserModel from '../models/public-user-model'
 import type GraphqlDiScope from '../types/graphql-di-scope'
 
-async function userDiResolver ({ request, authService, usersData }: GraphqlDiScope): Promise<PublicUserModel | undefined> {
+async function userDiResolver ({ request, authService, cacheService }: GraphqlDiScope): Promise<PublicUserModel | null> {
   const authToken = request.headers['x-auth-token']
   if (typeof authToken !== 'string') {
-    return undefined
+    return null
   }
   const userId = authService.validateAuthToken(authToken)
   if (userId == null) {
-    return undefined
+    return null
   }
-  return await usersData.findById(userId)
+  return await cacheService.read(cacheKeys.users.public.byId, { id: userId })
 }
 
 export default userDiResolver

@@ -1,7 +1,7 @@
 import type PublicUserModel from '../../models/public-user-model'
 import type UserModel from '../../models/user-model'
 import type AuthService from '../../services/auth-service'
-import type DatabaseConnectionPool from '../../services/database-connection-pool'
+import type DatabaseConnectionPool from '../../singletons/database-connection-pool'
 import type GraphqlDiScope from '../../types/graphql-di-scope'
 
 class UsersData {
@@ -24,20 +24,20 @@ class UsersData {
     return id
   }
 
-  public async findById (id: number): Promise<PublicUserModel | undefined> {
+  public async findById (id: number): Promise<PublicUserModel | null> {
     const db = this.databaseConnectionPool.get()
     const user = await db('users').select('username').where('id', id).first()
     if (user == null) {
-      return undefined
+      return null
     }
     return { id, username: user.username }
   }
 
-  public async findByUsername (username: string): Promise<PublicUserModel | undefined> {
+  public async findByUsername (username: string): Promise<PublicUserModel | null> {
     const db = this.databaseConnectionPool.get()
     const user = await db('users').select('id').where('username', username).first()
     if (user == null) {
-      return undefined
+      return null
     }
     return { id: user.id, username }
   }

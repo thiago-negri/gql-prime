@@ -2,7 +2,7 @@ version: "3"
 
 services:
   mysql:
-    image: mysql:8.0
+    image: mysql:8.3.0
     environment:
       - MYSQL_ROOT_PASSWORD=rootpassw0rd
       - MYSQL_DATABASE=gqlprime
@@ -13,6 +13,17 @@ services:
     ports:
       - '3306:3306'
 
+  redis:
+    image: redis:7.2.4
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning --requirepass passw0rd
+    volumes: 
+      - redis:/data
+
 volumes:
   mysql:
+    driver: local
+  redis:
     driver: local

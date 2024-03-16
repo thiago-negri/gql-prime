@@ -6,12 +6,16 @@ easy to maintain. Includes:
 - Database access and migrations (Knex)
 - Secure properties read from JSON file
 - Secure properties are typesafe -- TODO
-- External cache read and write (Redis) -- TODO
+- External cache read and write (Redis)
+- Allow expire of half-baked keys on cache -- TODO
+- In-memory cache with low TTL as a two-layer cache before hitting Redis -- TODO
 - Dependency injection (Awilix)
 - GraphQL schema / resolvers (Mercurius)
-- Data loaders to avoid N+1 issues -- TODO
+- Data loaders to avoid N+1 issues on database -- TODO
+- Data loaders for Redis mget -- TODO
 - HTTP server (Fastify)
 - Unit and integration tests -- TODO
+- Unit test that guarantees cache keys + schema uniqueness -- TODO
 
 It's still a work in progress.
 
@@ -51,6 +55,11 @@ a request.
 They are exposed according to the file name, with `di-resolver` removed from the suffix
 (e.g. `current-date-di-resolver.ts` becomes `currentDate` in the container).
 
+Singletons from `./src/singletons` are manually registered in the DI context in `config-awilix.ts`.
+Those are usually dependencies that require some sort of setup before the app starts (e.g. connecting to external servers),
+so to avoid having to `await` in the app code (because the connection returns a promise), we do the awaits during
+app setup and register the value after the async operation finishes.
+
 The Awilix proxy object is not typed. To work around that, check type declaration at `./src/types/graphql-di-scope.ts`.
 The container is exposed to GQL resolvers through `context.diScope`.
 
@@ -71,3 +80,12 @@ Type resolvers need export their type, e.g. `{ CustomType: ... }`.
 Multiple files can export the same type, the resolvers are combined/merged.
 
 Check `./src/config/config-mercurius.ts` to see how it's setup.
+
+## Cache (Redis)
+
+Cache schema is defined by `./src/cache/cache-types.ts`, and cache keys are defined in `./src/cache/cache-keys.ts`.
+
+Cache keys define the TTL and a resolver function that will be called in case the value is not in cache.
+
+The Redis client is declared in `./src/singletons/redis-client.ts`, and is available through DI as `redisClient`, but
+app code should use `cacheService` (defined in `./src/services/cache-service.ts`).

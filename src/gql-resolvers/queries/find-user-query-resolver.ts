@@ -1,10 +1,11 @@
+import cacheKeys from '../../cache/cache-keys'
 import { type QueryResolvers } from '../../gen/generated-schema-types'
 import type GraphqlContext from '../../types/graphql-context'
 
 const findUserQueryResolver: QueryResolvers<GraphqlContext>['findUser'] = async (_parent, { input }, context) => {
-  const { usersData } = context.diScope
+  const { cacheService } = context.diScope
   const { id } = input
-  const user = await usersData.findById(id)
+  const user = await cacheService.read(cacheKeys.users.public.byId, { id })
   return { user }
 }
 

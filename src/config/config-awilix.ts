@@ -2,9 +2,15 @@ import path from 'path'
 import { fastifyAwilixPlugin } from '@fastify/awilix'
 import { Lifetime, asClass, asFunction, asValue, createContainer } from 'awilix'
 import { type FastifyInstance, type FastifyRequest, type FastifyReply } from 'fastify'
+import DatabaseConnectionPool from '../singletons/database-connection-pool'
+import configSecureProperties from './config-secure-properties'
+import redisClient from '../singletons/redis-client'
 
 /** user-service => userService */
 function formatDiClassName (fileName: string): string {
+  if (!fileName.endsWith('-service') && !fileName.endsWith('-data')) {
+    throw new Error(`Invalid service name: ${fileName}`)
+  }
   const parts = fileName.split('-')
   let result = parts[0]
   for (let i = 1; i < parts.length; i++) {
@@ -28,16 +34,18 @@ function formatDiResolverName (fileName: string): string {
 
 async function configAwilix (app: FastifyInstance): Promise<void> {
   const container = createContainer({ strict: true })
+
   await app.register(fastifyAwilixPlugin, {
     container,
     disposeOnClose: true,
     disposeOnResponse: true,
     strictBooleanEnforced: true
   })
+
   // Services and Data are SINGLETON by default
   app.diContainer.loadModules([
-    path.join(__dirname, '../data/**/*.ts'),
-    path.join(__dirname, '../services/**/*.ts')
+    path.resolve(__dirname, '../data/**/*.ts'),
+    path.resolve(__dirname, '../services/**/*.ts')
   ], {
     formatName: formatDiClassName,
     resolverOptions: {
@@ -45,9 +53,10 @@ async function configAwilix (app: FastifyInstance): Promise<void> {
       lifetime: Lifetime.SINGLETON
     }
   })
+
   // DI-Resolvers are SCOPED by default
   app.diContainer.loadModules([
-    path.join(__dirname, '../di-resolvers/**/*.ts')
+    path.resolve(__dirname, '../di-resolvers/**/*.ts')
   ], {
     formatName: formatDiResolverName,
     resolverOptions: {
@@ -55,6 +64,7 @@ async function configAwilix (app: FastifyInstance): Promise<void> {
       lifetime: Lifetime.SCOPED
     }
   })
+
   // Add 'request' and 'reply' to DI scope
   app.addHook('onRequest', (request: FastifyRequest, reply: FastifyReply, done: () => unknown): void => {
     request.diScope.register({
@@ -63,6 +73,11 @@ async function configAwilix (app: FastifyInstance): Promise<void> {
     })
     done()
   })
+
+  // Manual registration of singletons
+  const secureProperties = await configSecureProperties()
+  app.diContainer.register('databaseConnectionPool', asValue(new DatabaseConnectionPool(secureProperties.knex)))
+  app.diContainer.register('redisClient', asValue(await redisClient(secureProperties.redis)))
 }
 
 export default configAwilix
