@@ -1,5 +1,6 @@
 input FindUserInput {
-  id: Int!
+  id: Int
+  username: String
 }
 
 type FindUserPayload {

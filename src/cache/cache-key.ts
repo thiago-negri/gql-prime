@@ -1,18 +1,7 @@
 import type GraphqlDiScope from '../types/graphql-di-scope'
 import type CacheArgs from './cache-args'
+import cacheBuildArgs from './cache-build-args'
 import { type CacheType } from './cache-type'
-
-// TODO(tnegri): Args must have a defined sort order to allow expiration of half-baked keys ?
-function buildArgs (obj: CacheArgs): string {
-  const entries = Object.entries(obj)
-  return [...entries]
-    .sort(([a], [b]) => {
-      if (a < b) return -1
-      if (a > b) return 1
-      return 0
-    })
-    .map(([key, value]) => `${key}=${value}`).join('&')
-}
 
 interface CacheOptions<T> {
   type: CacheType<T>
@@ -20,6 +9,8 @@ interface CacheOptions<T> {
 }
 
 class CacheKey<F extends CacheArgs, T> {
+  kind: 'simple' = 'simple'
+
   readonly key: string
   readonly type: CacheType<T>
   readonly ttlInSeconds: number
@@ -33,7 +24,7 @@ class CacheKey<F extends CacheArgs, T> {
   }
 
   build (args: F): string {
-    return `${this.key}:${this.type.name}.${this.type.version}?${buildArgs(args)}`
+    return `${this.key}:${this.type.name}.${this.type.version}?${cacheBuildArgs(args)}`
   }
 }
 

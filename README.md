@@ -7,6 +7,7 @@ easy to maintain. Includes:
 - Secure properties read from JSON file
 - Secure properties are typesafe
 - External cache read and write (Redis)
+- Composite cache keys to use less storage
 - Allow expire of half-baked keys on cache -- TODO
 - In-memory cache with low TTL as a two-layer cache before hitting Redis -- TODO
 - Dependency injection (Awilix)
@@ -14,6 +15,7 @@ easy to maintain. Includes:
 - Data loaders to avoid N+1 issues on database
 - Data loaders for Redis mget
 - HTTP server (Fastify)
+- Logger -- TODO
 - Unit and integration tests -- TODO
 - Unit test that guarantees cache keys + schema uniqueness -- TODO
 
@@ -87,8 +89,48 @@ Check `./src/config/config-mercurius.ts` to see how it's setup.
 ## Cache (Redis)
 
 Cache schema is defined by `./src/cache/cache-types.ts`, and cache keys are defined in `./src/cache/cache-keys.ts`.
+That file must not include other imports as it should reflect the cache schema, and devs should update name/version when the
+schema changes, otherwise the app will read/write values that do not match the schema.
 
 Cache keys define the TTL and a resolver function that will be called in case the value is not in cache.
 
+Composite cache keys behave similar to cache keys, but the resolver may return a more complex type than what's stored in cache.
+This is to avoid duplicating objects in cache storage.
+For example, when selecting users by username, we may leverage the database query to return the entire user row, but we
+only store the user's id to Redis, because the user object is already stored in another cache key ("user by id").
+The composite cache key abstract that by writing to both keys (child and parent) when there's a cache miss, and automatically
+reading the parent's cache key when the child key hits.
+
 The Redis client is declared in `./src/singletons/redis-client.ts`, and is available through DI as `redisClient`, but
 app code should use `cacheService` (defined in `./src/services/cache-service.ts`).
+
+### Simple cache key example (pseudo-code)
+
+```typescript
+value = redis.get("key?id=1");
+if (!value) {
+  value = key.resolve({ id: 1 });
+  redis.set("key?id=1", value);
+}
+return value;
+```
+
+### Composite cache key example (pseudo-code)
+
+```typescript
+value = redis.get("composite-key?name=foo");
+if (!value) {
+  parentValue = compositeKey.resolve({ name: "foo" });
+  [parentArgs, childValue] = compositeKey.writeCallback(parentValue);
+  redis.set(`parent-key?${parentArgs}`, parentValue);
+  redis.set("composite-key?name=foo", childValue);
+  return parentValue;
+}
+parentArgs = compositeKey.readCallback(value);
+parentValue = redis.get(`parent-key?${parentArgs}`);
+if (!parentValue) {
+  parentValue = parentKey.resolve(parentArgs);
+  redis.set(`parent-key?${parentArgs}`, parentValue);
+}
+return parentValue;
+```

@@ -26,7 +26,7 @@ function formatDataLoaderName (fileName: string): string {
   }
   const parts = fileName.split('-')
   let result = parts[0]
-  for (let i = 1; i < parts.length - 2; i++) {
+  for (let i = 1; i < parts.length; i++) {
     result += parts[i].slice(0, 1).toUpperCase() + parts[i].slice(1)
   }
   return result

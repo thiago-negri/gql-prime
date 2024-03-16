@@ -17,7 +17,8 @@ export type Scalars = {
 };
 
 export type FindUserInput = {
-  id: Scalars['Int']['input'];
+  id?: InputMaybe<Scalars['Int']['input']>;
+  username?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type FindUserPayload = {
