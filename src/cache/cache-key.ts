@@ -6,6 +6,7 @@ import { type CacheType } from './cache-type'
 interface CacheOptions<T> {
   type: CacheType<T>
   ttlInSeconds: number
+  inMemoryTtlInSeconds?: number
 }
 
 class CacheKey<F extends CacheArgs, T> {
@@ -14,12 +15,14 @@ class CacheKey<F extends CacheArgs, T> {
   readonly key: string
   readonly type: CacheType<T>
   readonly ttlInSeconds: number
+  readonly inMemoryTtlInSeconds?: number
   readonly resolver: (diScope: GraphqlDiScope, args: F) => Promise<T | null>
 
   constructor (key: string, options: CacheOptions<T> & { resolver: (diScope: GraphqlDiScope, args: F) => Promise<T | null> }) {
     this.key = key
     this.type = options.type
     this.ttlInSeconds = options.ttlInSeconds
+    this.inMemoryTtlInSeconds = options.inMemoryTtlInSeconds
     this.resolver = options.resolver
   }
 

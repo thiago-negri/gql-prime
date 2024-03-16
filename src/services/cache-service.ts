@@ -25,6 +25,15 @@ class CacheService {
 
   async read<PF extends CacheArgs, F extends CacheArgs, T, CT> (key: CacheKey<F, T> | CacheKeyComposite<PF, T, F, CT>, args: F): Promise<T | null> {
     const redisKey = key.build(args)
+
+    const { inMemoryCacheService } = this.graphqlDiScope
+    if (key.inMemoryTtlInSeconds != null) {
+      const inMemoryValue = inMemoryCacheService.get(redisKey)
+      if (inMemoryValue != null) {
+        return inMemoryValue as T
+      }
+    }
+
     const value = await this.readDataLoader.load(redisKey)
     if (value == null) {
       const resolvedValue = await key.resolver(this.graphqlDiScope, args)
@@ -34,6 +43,9 @@ class CacheService {
 
       if (key.kind === 'simple') {
         await this.write(key, args, resolvedValue)
+        if (key.inMemoryTtlInSeconds != null) {
+          inMemoryCacheService.set(redisKey, resolvedValue, key.inMemoryTtlInSeconds)
+        }
         return resolvedValue
       }
 
@@ -42,7 +54,9 @@ class CacheService {
 
       const { parentKey } = key
       await this.write(parentKey, parentArgs, resolvedValue)
-
+      if (key.inMemoryTtlInSeconds != null) {
+        inMemoryCacheService.set(redisKey, resolvedValue, key.inMemoryTtlInSeconds)
+      }
       return resolvedValue
     }
 
@@ -53,7 +67,11 @@ class CacheService {
 
     const readValue = JSON.parse(value) as CT
     const parentArgs = key.readCallback(readValue)
-    return await this.read(key.parentKey, parentArgs)
+    const parentValue = await this.read(key.parentKey, parentArgs)
+    if (key.inMemoryTtlInSeconds != null) {
+      inMemoryCacheService.set(redisKey, parentValue, key.inMemoryTtlInSeconds)
+    }
+    return parentValue
   }
 
   private async loadRead (redisKeys: readonly string[]): Promise<Array<string | null>> {
@@ -65,8 +83,9 @@ class CacheService {
   }
 
   async write<PF extends CacheArgs, F extends CacheArgs, T, PT> (key: CacheKey<F, T> | CacheKeyComposite<PF, PT, F, T>, args: F, value: T): Promise<void> {
+    const { redisClient } = this.graphqlDiScope
     const redisKey = key.build(args)
-    await this.doWrite(redisKey, key.ttlInSeconds, value)
+    await redisClient.set(redisKey, JSON.stringify(value), key.ttlInSeconds)
   }
 
   async expire<F extends CacheArgs> (key: CacheKey<F, unknown>, args: F): Promise<void> {
@@ -77,11 +96,6 @@ class CacheService {
   private async loadExpire (redisKeys: readonly string[]): Promise<Array<number | null>> {
     const { redisClient } = this.graphqlDiScope
     return [await redisClient.del([...redisKeys])] // We don't care about the returned value
-  }
-
-  private async doWrite (key: string, ttlInSeconds: number, value: unknown): Promise<void> {
-    const { redisClient } = this.graphqlDiScope
-    await redisClient.set(key, JSON.stringify(value), ttlInSeconds)
   }
 }
 

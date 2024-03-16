@@ -7,6 +7,7 @@ import { type RedisClient } from '../singletons/redis-client'
 import type CacheService from '../services/cache-service'
 import type SecureProperties from '../secure/types/secure-properties'
 import type UsersDataLoader from '../dataloaders/users/users-data-loader'
+import type InMemoryCacheService from '../services/in-memory-cache-service'
 
 interface GraphqlDiScope {
   request: FastifyRequest
@@ -24,6 +25,7 @@ interface GraphqlDiScope {
 
   // Services
   authService: AuthService
+  inMemoryCacheService: InMemoryCacheService
   cacheService: CacheService
 
   // DI Resolvers

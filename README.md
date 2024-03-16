@@ -9,12 +9,14 @@ easy to maintain. Includes:
 - External cache read and write (Redis)
 - Composite cache keys to use less storage
 - Allow expire of half-baked keys on cache -- TODO
-- In-memory cache with low TTL as a two-layer cache before hitting Redis -- TODO
+- Optional in-memory cache with low TTL as a two-layer cache before hitting Redis
 - Dependency injection (Awilix)
 - GraphQL schema / resolvers (Mercurius)
 - Data loaders to avoid N+1 issues on database
 - Data loaders for Redis mget
 - HTTP server (Fastify)
+- Scheduled tasks -- TODO
+- Scheduled task to clear in memory cache -- TODO
 - Logger -- TODO
 - Unit and integration tests -- TODO
 - Unit test that guarantees cache keys + schema uniqueness -- TODO

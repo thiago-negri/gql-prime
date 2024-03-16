@@ -8,6 +8,7 @@ interface CacheOptionsComposite<PF extends CacheArgs, PT, T> {
   parentKey: CacheKey<PF, PT>
   type: CacheType<T>
   ttlInSeconds: number
+  inMemoryTtlInSeconds?: number
   writeCallback: (a: PT) => [PF, T]
   readCallback: (a: T) => PF
 }
@@ -19,6 +20,7 @@ class CacheKeyComposite<PF extends CacheArgs, PT, F extends CacheArgs, T> {
   readonly type: CacheType<T>
   readonly parentKey: CacheKey<PF, PT>
   readonly ttlInSeconds: number
+  readonly inMemoryTtlInSeconds?: number
   readonly resolver: (diScope: GraphqlDiScope, args: F) => Promise<PT | null>
   readonly writeCallback: (a: PT) => [PF, T]
   readonly readCallback: (a: T) => PF
@@ -28,6 +30,7 @@ class CacheKeyComposite<PF extends CacheArgs, PT, F extends CacheArgs, T> {
     this.type = options.type
     this.parentKey = options.parentKey
     this.ttlInSeconds = options.ttlInSeconds
+    this.inMemoryTtlInSeconds = options.inMemoryTtlInSeconds
     this.resolver = options.resolver
     this.writeCallback = options.writeCallback
     this.readCallback = options.readCallback
