@@ -13,7 +13,7 @@ interface CacheOptionsComposite<PF extends CacheArgs, PT, T> {
 }
 
 class CacheKeyComposite<PF extends CacheArgs, PT, F extends CacheArgs, T> {
-  kind: 'composite' = 'composite'
+  readonly kind: 'composite' = 'composite'
 
   readonly key: string
   readonly type: CacheType<T>

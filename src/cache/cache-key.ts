@@ -9,7 +9,7 @@ interface CacheOptions<T> {
 }
 
 class CacheKey<F extends CacheArgs, T> {
-  kind: 'simple' = 'simple'
+  readonly kind: 'simple' = 'simple'
 
   readonly key: string
   readonly type: CacheType<T>
