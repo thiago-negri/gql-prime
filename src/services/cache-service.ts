@@ -23,23 +23,29 @@ class CacheService {
       if (resolvedValue == null) {
         return null
       }
+
       if (key.kind === 'simple') {
-        await this.doWrite(redisKey, key.ttlInSeconds, resolvedValue)
-        return resolvedValue as T
+        await this.write(key, args, resolvedValue)
+        return resolvedValue
       }
+
       const [parentArgs, valueToWrite] = key.writeCallback(resolvedValue)
-      await this.doWrite(redisKey, key.ttlInSeconds, valueToWrite)
+      await this.write(key, args, valueToWrite)
 
       const { parentKey } = key
-      await this.doWrite(parentKey.build(parentArgs), parentKey.ttlInSeconds, resolvedValue)
+      await this.write(parentKey, parentArgs, resolvedValue)
+
       return resolvedValue
     }
-    const readValue = JSON.parse(value)
+
     if (key.kind === 'simple') {
-      return readValue as T
+      const readValue = JSON.parse(value) as T
+      return readValue
     }
-    const valueToReturn = await this.read(key.parentKey, key.readCallback(readValue as CT))
-    return valueToReturn
+
+    const readValue = JSON.parse(value) as CT
+    const parentArgs = key.readCallback(readValue)
+    return await this.read(key.parentKey, parentArgs)
   }
 
   private async loadRead (redisKeys: readonly string[]): Promise<Array<string | null>> {
@@ -50,7 +56,7 @@ class CacheService {
     return await redisClient.mget([...redisKeys])
   }
 
-  async write<F extends CacheArgs, T> (key: CacheKey<F, T>, args: F, value: T): Promise<void> {
+  async write<PF extends CacheArgs, F extends CacheArgs, T, PT> (key: CacheKey<F, T> | CacheKeyComposite<PF, PT, F, T>, args: F, value: T): Promise<void> {
     const redisKey = key.build(args)
     await this.doWrite(redisKey, key.ttlInSeconds, value)
   }
