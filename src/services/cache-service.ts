@@ -29,8 +29,8 @@ class CacheService {
         return resolvedValue
       }
 
-      const [parentArgs, valueToWrite] = key.writeCallback(resolvedValue)
-      await this.write(key, args, valueToWrite)
+      const [parentArgs, childValue] = key.writeCallback(resolvedValue)
+      await this.write(key, args, childValue)
 
       const { parentKey } = key
       await this.write(parentKey, parentArgs, resolvedValue)
