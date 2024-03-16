@@ -15,8 +15,7 @@ easy to maintain. Includes:
 - Data loaders to avoid N+1 issues on database
 - Data loaders for Redis mget
 - HTTP server (Fastify)
-- Scheduled tasks -- TODO
-- Scheduled task to clear in memory cache -- TODO
+- Scheduled task to clear in memory cache (node-cache)
 - Request metrics (cache, sql, ...) -- TODO
 - Logger -- TODO
 - Unit and integration tests -- TODO
