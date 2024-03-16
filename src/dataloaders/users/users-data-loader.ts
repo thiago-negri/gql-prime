@@ -11,8 +11,8 @@ class UsersDataLoader {
 
   constructor ({ usersData }: GraphqlDiScope) {
     this.usersData = usersData
-    this.loaderById = new DataLoader(this.loadById.bind(this))
-    this.loaderByUsername = new DataLoader(this.loadByUsername.bind(this))
+    this.loaderById = new DataLoader(this.loadById.bind(this), { maxBatchSize: 20 })
+    this.loaderByUsername = new DataLoader(this.loadByUsername.bind(this), { maxBatchSize: 20 })
   }
 
   async findById (id: number): Promise<PublicUserModel | null> {
