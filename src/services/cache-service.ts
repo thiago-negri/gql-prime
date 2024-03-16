@@ -17,38 +17,28 @@ class CacheService {
 
   async read<PF extends CacheArgs, F extends CacheArgs, T, CT> (key: CacheKey<F, T> | CacheKeyComposite<PF, T, F, CT>, args: F): Promise<T | null> {
     const redisKey = key.build(args)
-    console.log(`REDIS: Reading ${redisKey}`)
     const value = await this.readDataLoader.load(redisKey)
     if (value == null) {
-      console.log(`REDIS: Miss. Resolving ${redisKey}`)
       const resolvedValue = await key.resolver(this.graphqlDiScope, args)
       if (resolvedValue == null) {
         return null
       }
       if (key.kind === 'simple') {
-        console.log(`REDIS: Miss. Simple writing ${redisKey} = ${JSON.stringify(resolvedValue)}`)
         await this.doWrite(redisKey, key.ttlInSeconds, resolvedValue)
-        console.log(`REDIS: Miss. Simple returning ${redisKey} = ${JSON.stringify(resolvedValue)}`)
         return resolvedValue as T
       }
       const [parentArgs, valueToWrite] = key.writeCallback(resolvedValue)
-      console.log(`REDIS: Miss. Composite writing child ${redisKey} = ${JSON.stringify(valueToWrite)}`)
       await this.doWrite(redisKey, key.ttlInSeconds, valueToWrite)
 
       const { parentKey } = key
-      console.log(`REDIS: Miss. Composite writing parent ${parentKey.build(parentArgs)} = ${JSON.stringify(resolvedValue)}`)
       await this.doWrite(parentKey.build(parentArgs), parentKey.ttlInSeconds, resolvedValue)
-      console.log(`REDIS: Miss. Composite returning ${redisKey} = ${JSON.stringify(resolvedValue)}`)
       return resolvedValue
     }
     const readValue = JSON.parse(value)
-    console.log(`REDIS: Hit. Read ${redisKey} = ${JSON.stringify(readValue)}`)
     if (key.kind === 'simple') {
-      console.log(`REDIS: Hit. Simple returning ${redisKey} = ${JSON.stringify(readValue)}`)
-      return readValue
+      return readValue as T
     }
     const valueToReturn = await this.read(key.parentKey, key.readCallback(readValue as CT))
-    console.log(`REDIS: Hit. Composite returning ${redisKey} = ${JSON.stringify(valueToReturn)}`)
     return valueToReturn
   }
 
