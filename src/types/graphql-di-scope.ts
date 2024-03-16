@@ -6,6 +6,7 @@ import type DatabaseConnectionPool from '../singletons/database-connection-pool'
 import { type RedisClient } from '../singletons/redis-client'
 import type CacheService from '../services/cache-service'
 import type SecureProperties from '../secure/types/secure-properties'
+import type UsersDataLoader from '../dataloaders/users/users-data-loader'
 
 interface GraphqlDiScope {
   request: FastifyRequest
@@ -17,6 +18,9 @@ interface GraphqlDiScope {
 
   // Data
   usersData: UsersData
+
+  // DataLoaders
+  usersDataLoader: UsersDataLoader
 
   // Services
   authService: AuthService

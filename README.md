@@ -11,8 +11,8 @@ easy to maintain. Includes:
 - In-memory cache with low TTL as a two-layer cache before hitting Redis -- TODO
 - Dependency injection (Awilix)
 - GraphQL schema / resolvers (Mercurius)
-- Data loaders to avoid N+1 issues on database -- TODO
-- Data loaders for Redis mget -- TODO
+- Data loaders to avoid N+1 issues on database
+- Data loaders for Redis mget
 - HTTP server (Fastify)
 - Unit and integration tests -- TODO
 - Unit test that guarantees cache keys + schema uniqueness -- TODO
@@ -49,6 +49,9 @@ You can create a new migration using `knex migrate:make <NAME> -x ts`.
 Classes from `./src/data` and `./src/services` are automatically made available in the Awilix container.
 Their default lifetime is singleton, meaning there's only one instance for the entire app.
 They are exposed according to the file name (e.g. `user-service.ts` becomes `userService` in the container).
+
+Classes from `./src/dataloaders` are automatically available in the container, just like data and services,
+but they have scoped lifetime.
 
 Functions from `./src/di-resolvers` are automatically made available as well, but their lifetime is scoped to
 a request.

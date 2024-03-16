@@ -7,7 +7,7 @@ const cacheKeys = {
       byId: new CacheKey('users.public.byId', {
         type: PUBLIC_USER_MODEL_CACHE,
         ttlInSeconds: 60,
-        resolver: async ({ usersData }, args: { id: number }) => await usersData.findById(args.id)
+        resolver: async ({ usersDataLoader }, args: { id: number }) => await usersDataLoader.findById(args.id)
       })
     }
   }

@@ -33,6 +33,12 @@ class UsersData {
     return { id, username: user.username }
   }
 
+  public async findByIdIn (ids: readonly number[]): Promise<PublicUserModel[]> {
+    const db = this.databaseConnectionPool.get()
+    const users = await db('users').select('id', 'username').whereIn('id', ids)
+    return users.map(({ id, username }) => ({ id, username }))
+  }
+
   public async findByUsername (username: string): Promise<PublicUserModel | null> {
     const db = this.databaseConnectionPool.get()
     const user = await db('users').select('id').where('username', username).first()
@@ -40,6 +46,12 @@ class UsersData {
       return null
     }
     return { id: user.id, username }
+  }
+
+  public async findByUsernameIn (usernames: readonly string[]): Promise<PublicUserModel[]> {
+    const db = this.databaseConnectionPool.get()
+    const users = await db('users').select('id', 'username').whereIn('username', usernames)
+    return users.map(({ id, username }) => ({ id, username }))
   }
 
   public async existsUsername (username: string): Promise<boolean> {

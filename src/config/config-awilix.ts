@@ -19,6 +19,19 @@ function formatDiClassName (fileName: string): string {
   return result
 }
 
+/** foo-data-loader => fooDataLoader */
+function formatDataLoaderName (fileName: string): string {
+  if (!fileName.endsWith('-data-loader')) {
+    throw new Error(`Invalid data loader name: ${fileName}`)
+  }
+  const parts = fileName.split('-')
+  let result = parts[0]
+  for (let i = 1; i < parts.length - 2; i++) {
+    result += parts[i].slice(0, 1).toUpperCase() + parts[i].slice(1)
+  }
+  return result
+}
+
 /** current-date-di-resolver => currentDate */
 function formatDiResolverName (fileName: string): string {
   if (!fileName.endsWith('-di-resolver')) {
@@ -51,6 +64,17 @@ async function configAwilix (app: FastifyInstance, secureProperties: SecurePrope
     resolverOptions: {
       register: asClass,
       lifetime: Lifetime.SINGLETON
+    }
+  })
+
+  // DataLoaders are SCOPED by default
+  app.diContainer.loadModules([
+    path.resolve(__dirname, '../dataloaders/**/*.ts')
+  ], {
+    formatName: formatDataLoaderName,
+    resolverOptions: {
+      register: asClass,
+      lifetime: Lifetime.SCOPED
     }
   })
 
