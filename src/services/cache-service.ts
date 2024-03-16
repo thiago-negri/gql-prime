@@ -24,28 +24,23 @@ class CacheService {
   }
 
   async read<PF extends CacheArgs, F extends CacheArgs, T, CT> (key: CacheKey<F, T> | CacheKeyComposite<PF, T, F, CT>, args: F): Promise<T | null> {
-    const redisKey = key.build(args)
-
     const { inMemoryCacheService } = this.graphqlDiScope
-    if (key.inMemoryTtlInSeconds != null) {
-      const inMemoryValue = inMemoryCacheService.get(redisKey)
-      if (inMemoryValue != null) {
-        return inMemoryValue as T
-      }
+    const inMemoryValue = inMemoryCacheService.get(key, args)
+    if (inMemoryValue != null) {
+      return inMemoryValue as T
     }
 
+    const redisKey = key.build(args)
     const value = await this.readDataLoader.load(redisKey)
     if (value == null) {
       const resolvedValue = await key.resolver(this.graphqlDiScope, args)
       if (resolvedValue == null) {
         return null
       }
+      inMemoryCacheService.set(key, args, resolvedValue)
 
       if (key.kind === 'simple') {
         await this.write(key, args, resolvedValue)
-        if (key.inMemoryTtlInSeconds != null) {
-          inMemoryCacheService.set(redisKey, resolvedValue, key.inMemoryTtlInSeconds)
-        }
         return resolvedValue
       }
 
@@ -54,9 +49,6 @@ class CacheService {
 
       const { parentKey } = key
       await this.write(parentKey, parentArgs, resolvedValue)
-      if (key.inMemoryTtlInSeconds != null) {
-        inMemoryCacheService.set(redisKey, resolvedValue, key.inMemoryTtlInSeconds)
-      }
       return resolvedValue
     }
 
@@ -68,8 +60,8 @@ class CacheService {
     const readValue = JSON.parse(value) as CT
     const parentArgs = key.readCallback(readValue)
     const parentValue = await this.read(key.parentKey, parentArgs)
-    if (key.inMemoryTtlInSeconds != null) {
-      inMemoryCacheService.set(redisKey, parentValue, key.inMemoryTtlInSeconds)
+    if (parentValue != null) {
+      inMemoryCacheService.set(key, args, parentValue)
     }
     return parentValue
   }
@@ -88,8 +80,10 @@ class CacheService {
     await redisClient.set(redisKey, JSON.stringify(value), key.ttlInSeconds)
   }
 
-  async expire<F extends CacheArgs> (key: CacheKey<F, unknown>, args: F): Promise<void> {
+  async expire<F extends CacheArgs, PF extends CacheArgs> (key: CacheKey<F, unknown> | CacheKeyComposite<PF, unknown, F, unknown>, args: F): Promise<void> {
+    const { inMemoryCacheService } = this.graphqlDiScope
     const redisKey = key.build(args)
+    inMemoryCacheService.expire(key, args)
     await this.expireDataLoader.load(redisKey)
   }
 
