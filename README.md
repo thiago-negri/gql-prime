@@ -5,7 +5,7 @@ easy to maintain. Includes:
 
 - Database access and migrations (Knex)
 - Secure properties read from JSON file
-- Secure properties are typesafe -- TODO
+- Secure properties are typesafe
 - External cache read and write (Redis)
 - Allow expire of half-baked keys on cache -- TODO
 - In-memory cache with low TTL as a two-layer cache before hitting Redis -- TODO

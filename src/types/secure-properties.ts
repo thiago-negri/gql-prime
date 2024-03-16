@@ -1,12 +1,22 @@
-import { type Knex } from 'knex'
+import { type JSONSchemaType } from 'ajv'
+import type KnexConfig from './knex-config'
+import { knexConfigSchemaType } from './knex-config'
 import type RedisConfig from './redis-config'
+import { redisConfigSchemaType } from './redis-config'
 
-/**
- * This is read from a JSON file, there's no type safety.
- */
 interface SecureProperties {
-  knex: Knex.Config
+  knex: KnexConfig
   redis: RedisConfig
+}
+
+export const securePropertiesSchemaType: JSONSchemaType<SecureProperties> = {
+  type: 'object',
+  properties: {
+    knex: knexConfigSchemaType,
+    redis: redisConfigSchemaType
+  },
+  required: ['knex', 'redis'],
+  additionalProperties: false
 }
 
 export default SecureProperties

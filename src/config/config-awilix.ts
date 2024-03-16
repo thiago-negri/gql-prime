@@ -3,8 +3,8 @@ import { fastifyAwilixPlugin } from '@fastify/awilix'
 import { Lifetime, asClass, asFunction, asValue, createContainer } from 'awilix'
 import { type FastifyInstance, type FastifyRequest, type FastifyReply } from 'fastify'
 import DatabaseConnectionPool from '../singletons/database-connection-pool'
-import configSecureProperties from './config-secure-properties'
 import redisClient from '../singletons/redis-client'
+import type SecureProperties from '../types/secure-properties'
 
 /** user-service => userService */
 function formatDiClassName (fileName: string): string {
@@ -32,7 +32,7 @@ function formatDiResolverName (fileName: string): string {
   return result
 }
 
-async function configAwilix (app: FastifyInstance): Promise<void> {
+async function configAwilix (app: FastifyInstance, secureProperties: SecureProperties): Promise<void> {
   const container = createContainer({ strict: true })
 
   await app.register(fastifyAwilixPlugin, {
@@ -75,7 +75,6 @@ async function configAwilix (app: FastifyInstance): Promise<void> {
   })
 
   // Manual registration of singletons
-  const secureProperties = await configSecureProperties()
   app.diContainer.register('databaseConnectionPool', asValue(new DatabaseConnectionPool(secureProperties.knex)))
   app.diContainer.register('redisClient', asValue(await redisClient(secureProperties.redis)))
 }
