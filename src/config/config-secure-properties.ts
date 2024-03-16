@@ -1,8 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 import Ajv from 'ajv'
-import type SecureProperties from '../types/secure-properties'
-import { securePropertiesSchemaType } from '../types/secure-properties'
+import type SecureProperties from '../secure/types/secure-properties'
+import { securePropertiesSchemaType } from '../secure/types/secure-properties'
 
 async function configSecureProperties (): Promise<SecureProperties> {
   const ajv = new Ajv()

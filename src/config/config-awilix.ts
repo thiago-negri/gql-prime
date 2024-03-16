@@ -4,7 +4,7 @@ import { Lifetime, asClass, asFunction, asValue, createContainer } from 'awilix'
 import { type FastifyInstance, type FastifyRequest, type FastifyReply } from 'fastify'
 import DatabaseConnectionPool from '../singletons/database-connection-pool'
 import redisClient from '../singletons/redis-client'
-import type SecureProperties from '../types/secure-properties'
+import type SecureProperties from '../secure/types/secure-properties'
 
 /** user-service => userService */
 function formatDiClassName (fileName: string): string {

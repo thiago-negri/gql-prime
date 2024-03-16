@@ -1,5 +1,5 @@
 import { createClient } from 'redis'
-import type RedisConfig from '../types/redis-config'
+import type RedisConfig from '../secure/types/redis-config'
 
 export interface RedisClient {
   set: (key: string, value: string, ttlInSeconds: number) => Promise<string | null>
