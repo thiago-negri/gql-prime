@@ -6,10 +6,12 @@ import type GraphqlDiScope from '../types/graphql-di-scope'
 class CacheService {
   private readonly graphqlDiScope: GraphqlDiScope
   private readonly readDataLoader: DataLoader<string, string | null>
+  private readonly expireDataLoader: DataLoader<string, number | null>
 
   constructor (graphqlDiScope: GraphqlDiScope) {
     this.graphqlDiScope = graphqlDiScope
     this.readDataLoader = new DataLoader(this.loadRead.bind(this), { maxBatchSize: 10, cache: false })
+    this.expireDataLoader = new DataLoader(this.loadExpire.bind(this), { maxBatchSize: 10, cache: false })
   }
 
   async read<F extends CacheArgs, T> (key: CacheKey<F, T>, args: F): Promise<T | null> {
@@ -31,7 +33,7 @@ class CacheService {
     if (redisKeys.length === 1) {
       return [await redisClient.get(redisKeys[0])]
     }
-    return await redisClient.mget(redisKeys)
+    return await redisClient.mget([...redisKeys])
   }
 
   async write<F extends CacheArgs, T> (key: CacheKey<any, T>, args: F, value: T): Promise<void> {
@@ -40,9 +42,13 @@ class CacheService {
   }
 
   async expire<F extends CacheArgs, T> (key: CacheKey<any, T>, args: F): Promise<void> {
-    const { redisClient } = this.graphqlDiScope
     const redisKey = key.build(args)
-    await redisClient.del(redisKey)
+    await this.expireDataLoader.load(redisKey)
+  }
+
+  private async loadExpire (redisKeys: readonly string[]): Promise<Array<number | null>> {
+    const { redisClient } = this.graphqlDiScope
+    return [await redisClient.del([...redisKeys])] // We don't care about the returned value
   }
 
   private async doWrite (key: string, ttlInSeconds: number, value: unknown): Promise<void> {
