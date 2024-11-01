@@ -1,12 +1,3 @@
-input FindUserInput {
-  id: Int
-  username: String
-}
-
-type FindUserPayload {
-  user: User
-}
-
 type Query {
-  findUser(input: FindUserInput!): FindUserPayload
+  findUser(username: String!): User
 }

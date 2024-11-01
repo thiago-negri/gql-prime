@@ -1,6 +1,6 @@
-import type { Knex } from 'knex'
+import type { Knex } from "knex";
 
-export async function up (knex: Knex): Promise<void> {
+export async function up(knex: Knex): Promise<void> {
   await knex.schema.raw(`
         CREATE TABLE users (
             id INT NOT NULL AUTO_INCREMENT,
@@ -11,11 +11,11 @@ export async function up (knex: Knex): Promise<void> {
             PRIMARY KEY (id),
             CONSTRAINT uc_users_username UNIQUE (username)
         )
-    `)
+    `);
 }
 
-export async function down (knex: Knex): Promise<void> {
+export async function down(knex: Knex): Promise<void> {
   await knex.schema.raw(`
         DROP TABLE users
-    `)
+    `);
 }

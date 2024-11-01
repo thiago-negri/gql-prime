@@ -1,10 +1,16 @@
-import { type QueryResolvers } from '../../gen/generated-schema-types'
-import type GraphqlContext from '../../types/graphql-context'
+import { userToGraphql } from "models/public-user-model";
+import { type QueryResolvers } from "../../gen/generated-schema-types";
+import type GraphqlContext from "../../types/graphql-context";
 
-const myUserQueryResolver: QueryResolvers<GraphqlContext>['myUser'] = async (_parent, _args, context) => {
-  const { user } = context.diScope
-  return (await user) ?? null
-}
+const myUserQueryResolver: QueryResolvers<GraphqlContext>["myUser"] = async (
+  _parent,
+  _args,
+  context
+) => {
+  const { userPromise } = context.diScope;
+  const user = await userPromise;
+  return userToGraphql(user);
+};
 
-const Query: QueryResolvers = { myUser: myUserQueryResolver }
-export default { Query }
+const Query: QueryResolvers<GraphqlContext> = { myUser: myUserQueryResolver };
+export default { Query };

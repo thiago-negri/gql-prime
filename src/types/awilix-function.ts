@@ -1,8 +1,8 @@
-import { type RESOLVER, type ResolverOptions } from 'awilix'
+import { type RESOLVER, type ResolverOptions } from "awilix";
 
 interface AwilixFunction<T> {
-  (): T
-  [RESOLVER]: ResolverOptions<T>
+  (): T;
+  [RESOLVER]: ResolverOptions<T>;
 }
 
-export default AwilixFunction
+export default AwilixFunction;

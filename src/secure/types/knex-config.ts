@@ -1,33 +1,33 @@
-import { type JSONSchemaType } from 'ajv'
+import { type JSONSchemaType } from "ajv";
 
 interface KnexConfig {
-  client: string
+  client: string;
   connection: {
-    host: string
-    port: number
-    user: string
-    password: string
-    database: string
-  }
+    host: string;
+    port: number;
+    user: string;
+    password: string;
+    database: string;
+  };
 }
 
 export const knexConfigSchemaType: JSONSchemaType<KnexConfig> = {
-  type: 'object',
+  type: "object",
   properties: {
-    client: { type: 'string' },
+    client: { type: "string" },
     connection: {
-      type: 'object',
+      type: "object",
       properties: {
-        host: { type: 'string' },
-        port: { type: 'number' },
-        user: { type: 'string' },
-        password: { type: 'string' },
-        database: { type: 'string' }
+        host: { type: "string" },
+        port: { type: "number" },
+        user: { type: "string" },
+        password: { type: "string" },
+        database: { type: "string" },
       },
-      required: ['host', 'port', 'user', 'password', 'database']
-    }
+      required: ["host", "port", "user", "password", "database"],
+    },
   },
-  required: ['client', 'connection']
-}
+  required: ["client", "connection"],
+};
 
-export default KnexConfig
+export default KnexConfig;

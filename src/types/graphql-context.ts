@@ -1,7 +1,7 @@
-import type GraphqlDiScope from './graphql-di-scope'
+import type GraphqlDiScope from "./graphql-di-scope";
 
 interface GraphqlContext {
-  diScope: GraphqlDiScope
+  diScope: GraphqlDiScope;
 }
 
-export default GraphqlContext
+export default GraphqlContext;

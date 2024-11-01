@@ -1,15 +1,15 @@
-import { type JSONSchemaType } from 'ajv'
+import { type JSONSchemaType } from "ajv";
 
 interface RedisConfig {
-  url: string
+  url: string;
 }
 
 export const redisConfigSchemaType: JSONSchemaType<RedisConfig> = {
-  type: 'object',
+  type: "object",
   properties: {
-    url: { type: 'string' }
+    url: { type: "string" },
   },
-  required: ['url']
-}
+  required: ["url"],
+};
 
-export default RedisConfig
+export default RedisConfig;

@@ -1,6 +1,6 @@
-const errorCodes = {
-  usernameAlreadyExists: 'Username already exists',
-  invalidMutationInput: 'Invalid mutation input'
+const enum ErrorCodes {
+  USERNAME_ALREADY_EXISTS,
+  INVALID_INPUT,
 }
 
-export default errorCodes
+export default ErrorCodes;

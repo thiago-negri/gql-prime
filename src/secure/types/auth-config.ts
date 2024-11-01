@@ -1,15 +1,15 @@
-import { type JSONSchemaType } from 'ajv'
+import { type JSONSchemaType } from "ajv";
 
 interface AuthConfig {
-  tokenSecret: string
+  tokenSecret: string;
 }
 
 export const authConfigSchemaType: JSONSchemaType<AuthConfig> = {
-  type: 'object',
+  type: "object",
   properties: {
-    tokenSecret: { type: 'string' }
+    tokenSecret: { type: "string" },
   },
-  required: ['tokenSecret']
-}
+  required: ["tokenSecret"],
+};
 
-export default AuthConfig
+export default AuthConfig;
