@@ -1,7 +1,7 @@
 import cacheKeys from "../../cache/cache-keys";
 import { type QueryResolvers } from "../../gen/generated-schema-types";
+import { userToGraphql } from "../../models/public-user-model";
 import type GraphqlContext from "../../types/graphql-context";
-import { userToGraphql } from "models/public-user-model";
 
 const findUserQueryResolver: QueryResolvers<GraphqlContext>["findUser"] =
   async (_parent, { username }, context) => {

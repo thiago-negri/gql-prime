@@ -1,8 +1,8 @@
-import { GraphqlEntityType, idFromGraphl } from "gql-utils/graphql-id";
 import cacheKeys from "../../cache/cache-keys";
 import { type QueryResolvers } from "../../gen/generated-schema-types";
+import { idFromGraphl, GraphqlEntityType } from "../../gql-utils/graphql-id";
+import { userToGraphql } from "../../models/public-user-model";
 import type GraphqlContext from "../../types/graphql-context";
-import { userToGraphql } from "models/public-user-model";
 
 const userQueryResolver: QueryResolvers<GraphqlContext>["user"] = async (
   _parent,

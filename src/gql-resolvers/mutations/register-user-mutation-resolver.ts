@@ -1,8 +1,8 @@
-import ErrorCodes from "constants/error-codes";
+import ErrorCodes from "../../constants/error-codes";
 import { type MutationResolvers } from "../../gen/generated-schema-types";
+import { GraphqlEntityType, idToGraphql } from "../../gql-utils/graphql-id";
 import type GraphqlContext from "../../types/graphql-context";
 import GraphqlError from "../../types/graphql-error";
-import { GraphqlEntityType, idToGraphql } from "gql-utils/graphql-id";
 
 const registerUserMutationResolver: MutationResolvers<GraphqlContext>["registerUser"] =
   async (_parent, { input }, context) => {

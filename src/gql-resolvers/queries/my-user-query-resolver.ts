@@ -1,5 +1,5 @@
-import { userToGraphql } from "models/public-user-model";
 import { type QueryResolvers } from "../../gen/generated-schema-types";
+import { userToGraphql } from "../../models/public-user-model";
 import type GraphqlContext from "../../types/graphql-context";
 
 const myUserQueryResolver: QueryResolvers<GraphqlContext>["myUser"] = async (

@@ -1,5 +1,5 @@
-import ErrorCodes from "constants/error-codes";
-import GraphqlError from "types/graphql-error";
+import ErrorCodes from "../constants/error-codes";
+import GraphqlError from "../types/graphql-error";
 
 export const enum GraphqlEntityType {
   USER = "user",
