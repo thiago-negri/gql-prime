@@ -20,6 +20,7 @@ easy to maintain. Includes:
 - Logger -- TODO
 - Unit and integration tests -- TODO
 - Unit test that guarantees cache keys + schema uniqueness -- TODO
+- Package app as a container -- TODO
 
 It's still a work in progress.
 
