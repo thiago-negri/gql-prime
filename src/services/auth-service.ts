@@ -18,7 +18,7 @@ class AuthService {
   }
 
   public async encryptPassword(password: string): Promise<string> {
-    const hash = await bcrypt.hash(password, 10);
+    const hash = await bcrypt.hash(password, BCRYPT_SALT_ROUNDS);
     return hash.slice(BCRYPT_MAGIC_PREFIX.length);
   }
 

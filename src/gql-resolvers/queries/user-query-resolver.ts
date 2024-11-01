@@ -1,4 +1,4 @@
-import { GraphqlEntityType, idFromGraphl } from "gql-resolvers/graphql-id";
+import { GraphqlEntityType, idFromGraphl } from "gql-utils/graphql-id";
 import cacheKeys from "../../cache/cache-keys";
 import { type QueryResolvers } from "../../gen/generated-schema-types";
 import type GraphqlContext from "../../types/graphql-context";

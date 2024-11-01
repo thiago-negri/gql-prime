@@ -1,6 +1,6 @@
 import { type User } from "gen/generated-schema-types";
 import type UserModel from "./user-model";
-import { GraphqlEntityType, idToGraphql } from "gql-resolvers/graphql-id";
+import { GraphqlEntityType, idToGraphql } from "gql-utils/graphql-id";
 
 type PublicUserModel = Omit<UserModel, "password">;
 
